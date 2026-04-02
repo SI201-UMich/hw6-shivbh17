@@ -232,6 +232,47 @@ def recommend_breeds_in_same_group(breed_name, cache_file):
             "No group information available for '{breed_name}'."  (no group id)
             "No recommendations found based on '{breed_name}'."  (no other breeds in that group)
     """
+    cache = load_json(cache_file)
+    if not cache:
+        return "No breed data found in cache."
+    target_group_id = None
+    breed_found = False
+ 
+    for url, entry in cache.items():
+        try:
+            name = entry['data']['attributes']['name']
+        except (KeyError, TypeError):
+            continue
+ 
+        if name.lower() == breed_name.lower():
+            breed_found = True
+            try:
+                target_group_id = entry['data']['relationships']['group']['data']['id']
+            except (KeyError, TypeError):
+                target_group_id = None
+            break
+ 
+    if not breed_found:
+        return f"'{breed_name}' is not in the cache."
+ 
+    if target_group_id is None:
+        return f"No group information available for '{breed_name}'."
+ 
+    recommendations = []
+    for url, entry in cache.items():
+        try:
+            name = entry['data']['attributes']['name']
+            group_id = entry['data']['relationships']['group']['data']['id']
+        except (KeyError, TypeError):
+            continue
+ 
+        if group_id == target_group_id and name.lower() != breed_name.lower():
+            recommendations.append(name)
+ 
+    if not recommendations:
+        return f"No recommendations found based on '{breed_name}'."
+ 
+    return sorted(recommendations)
 
 
 class TestHomeworkDogAPI(unittest.TestCase):
@@ -254,8 +295,8 @@ class TestHomeworkDogAPI(unittest.TestCase):
         # NOTE: By default we leave test files on disk so you can inspect the cache.
         # If you want the tests to clean up after themselves, UNCOMMENT the lines below.
         #
-        # if os.path.exists(self.test_cache_file):
-        #     os.remove(self.test_cache_file)
+        if os.path.exists(self.test_cache_file):
+            os.remove(self.test_cache_file)
         pass
 
     # -------------------------
@@ -456,7 +497,7 @@ class TestHomeworkDogAPI(unittest.TestCase):
     # -------------------------
     # extra credit - uncomment tests below to evaluate extra credit function
     # -------------------------
-    """
+    
     def test_recommend_breeds_in_same_group_empty_cache(self):
         create_cache({}, self.test_cache_file)
         self.assertEqual(
@@ -561,8 +602,6 @@ class TestHomeworkDogAPI(unittest.TestCase):
             recommend_breeds_in_same_group("breed a", self.test_cache_file),
             ["Breed B", "Breed Z"],
         )
-    """
-
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)
