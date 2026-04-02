@@ -2,9 +2,9 @@
 # Your name: Shiv Bhatia
 # Your student id: 18819760
 # Your email: shivbh@umich.edu
-# Who or what you worked with on this homework (including generative AI like ChatGPT):
-# If you worked with generative AI also add a statement for how you used it:
-# Did your use of GenAI on this assignment align with your goals and guidelines in your Gen AI contract? If not, why?
+# Who or what you worked with on this homework (including generative AI like ChatGPT): I worked by myself on this assignment, with some help from GenAI tools and google.
+# If you worked with generative AI also add a statement for how you used it:  This homework felt more straightforward, especially the first 2 tasks, so I didn't need to use AI to understand the structure. However, on the longer functions, I did run into some bugs, so to help me understand the bugs I used AI. For example, my entry into the JSON and the different nests was showing errors, so to figure out where that was coming from, I used some AI. 
+# Did your use of GenAI on this assignment align with your goals and guidelines in your Gen AI contract? If not, why?: Yes, it was in line. Again, I used AI to support my thinking and help with the later-end of the coding process, and understanding some of the longer functions. I did not rely on it to write my code, so was in line. 
 
 # --- ARGUMENTS & EXPECTED RETURN VALUES PROVIDED --- #
 # --- SEE INSTRUCTIONS FOR FULL DETAILS ON METHOD IMPLEMENTATION --- #
