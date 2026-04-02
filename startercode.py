@@ -169,7 +169,7 @@ def get_longest_lifespan_breed(cache_file):
     if best_name is None:
         return "No breeds found"
 
-    return (best_name, best_lifespan)
+    return (best_name, int(best_lifespan))
 
 
 def get_groups_above_cutoff(cutoff, cache_file):
