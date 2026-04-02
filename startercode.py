@@ -78,7 +78,7 @@ def search_breed(breed_id):
  
     if response.status_code == 200:
         parsed_json = response.json()
-        
+
         if parsed_json.get('data') is not None:
             return (parsed_json, url)
  
@@ -99,8 +99,8 @@ def update_cache(breed_ids, cache_file):
         A string: "Cached data for {percentage}% of breeds",
         where percentage = (successful_new_adds / len(breed_ids)) * 100.
     """
+
     cache = load_json(cache_file)
- 
     new_additions = 0
  
     for breed_id in breed_ids:
@@ -134,7 +134,42 @@ def get_longest_lifespan_breed(cache_file):
         A tuple (breed_name, max_lifespan_integer) for the winning breed, OR the
         string "No breeds found" if no breed in the cache has a life.max value.
     """
-    pass
+        
+    cache = load_json(cache_file)
+    best_name = None
+    best_lifespan = None
+
+    for url, entry in cache.items():
+        if 'data' not in entry:
+            continue
+        if 'attributes' not in entry['data']:
+            continue
+        
+        attributes = entry['data']['attributes']
+        
+        if 'name' not in attributes:
+            continue
+        if 'life' not in attributes:
+            continue
+        if 'max' not in attributes['life']:
+            continue
+        
+        name = attributes['name']
+        max_life = attributes['life']['max']
+
+        if not isinstance(max_life, (int, float)):
+            continue
+
+        if best_lifespan is None or max_life > best_lifespan:
+            best_name = name
+            best_lifespan = max_life
+        elif max_life == best_lifespan and name < best_name:
+            best_name = name
+
+    if best_name is None:
+        return "No breeds found"
+
+    return (best_name, best_lifespan)
 
 
 def get_groups_above_cutoff(cutoff, cache_file):
